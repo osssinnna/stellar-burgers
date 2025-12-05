@@ -13,7 +13,7 @@ export const Login: FC = () => {
   const location = useLocation();
 
   const { user, error } = useSelector((state) => state.user);
-
+  const from = (location.state as { from?: Location })?.from?.pathname || '/';
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(loginUser({ email, password }));
@@ -21,13 +21,13 @@ export const Login: FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/', { replace: true });
+      navigate(from, { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, navigate, from]);
 
   return (
     <LoginUI
-      errorText=''
+      errorText={error || ''}
       email={email}
       setEmail={setEmail}
       password={password}

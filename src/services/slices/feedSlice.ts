@@ -54,7 +54,6 @@ export const fetchFeedOrders = (): AppThunk => async (dispatch) => {
     dispatch(feedRequest());
 
     const data = await getFeedsApi();
-    console.log('FEED RESPONSE', data);
 
     dispatch(
       feedSuccess({

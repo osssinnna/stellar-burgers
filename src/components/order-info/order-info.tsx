@@ -7,7 +7,6 @@ import { TIngredient } from '@utils-types';
 
 import { useDispatch, useSelector } from '../../services/store';
 import { fetchOrderByNumber } from '../../services/slices/orderDetailsSlice';
-import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();
@@ -22,14 +21,13 @@ export const OrderInfo: FC = () => {
   const ingredients = useSelector(
     (state) => state.ingredients.items
   ) as TIngredient[];
+  const ingredientsLoading = useSelector(
+    (state) => state.ingredients.isLoading
+  );
 
   useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(fetchIngredients());
-    }
-  }, [ingredients.length, dispatch]);
+    if (!orderNumber) return;
 
-  useEffect(() => {
     const hasOrderInFeed = feedOrders.some(
       (order) => order.number === orderNumber
     );
@@ -59,6 +57,7 @@ export const OrderInfo: FC = () => {
 
     const ingredientsInfo = orderData.ingredients.reduce(
       (acc: TIngredientsWithCount, itemId) => {
+        if (!itemId) return acc;
         if (!acc[itemId]) {
           const ingredient = ingredients.find((ing) => ing._id === itemId);
           if (ingredient) {
@@ -89,7 +88,7 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
+  if (ingredientsLoading || !orderInfo) {
     return <Preloader />;
   }
 
