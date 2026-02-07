@@ -85,7 +85,7 @@ module.exports = {
     path: path.resolve(__dirname, './dist'),
     filename: 'bundle.js',
     clean: true,
-    publicPath: '/REPO_NAME/'
+    publicPath: '/stellar-burgers/'
   },
   devServer: {
     static: path.join(__dirname, './dist'),
